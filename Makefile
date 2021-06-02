@@ -11,6 +11,17 @@ build:
 run: build
 	@./$(NAME) -e development
 
+.PHONY: docker
+## docker: Run docker-compose.
+docker:
+	@(cd .devcontainer; docker ps | grep devcontainer_web_1 || docker-compose up -d;)
+	docker exec -it devcontainer_web_1 zsh
+
+.PHONY: stop
+## stop: Stop docker-compose.
+stop:
+	@(cd .devcontainer; docker-compose down;)
+
 .PHONY: run-prod
 ## run-prod: Build and Run in production mode.
 run-prod: build

@@ -1,7 +1,6 @@
 package db
 
 import (
-	"log"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -21,42 +20,42 @@ func Init() {
 		DisableSSL:  aws.Bool(c.GetBool("db.disable_ssl")),
 	}))
 
-	input := &dynamodb.CreateTableInput{
-		AttributeDefinitions: []*dynamodb.AttributeDefinition{
-			{
-				AttributeName: aws.String("BirthDay"),
-				AttributeType: aws.String("S"),
-			},
-			{
-				AttributeName: aws.String("Gender"),
-				AttributeType: aws.String("S"),
-			},
-			{
-				AttributeName: aws.String("PhotoURL"),
-				AttributeType: aws.String("S"),
-			},
-		},
-		KeySchema: []*dynamodb.KeySchemaElement{
-			{
-				AttributeName: aws.String("ID"),
-				KeyType:       aws.String("HASH"),
-			},
-			{
-				AttributeName: aws.String("Name"),
-				KeyType:       aws.String("S"),
-			},
-		},
-		ProvisionedThroughput: &dynamodb.ProvisionedThroughput{
-			ReadCapacityUnits:  aws.Int64(5),
-			WriteCapacityUnits: aws.Int64(5),
-		},
+	// input := &dynamodb.CreateTableInput{
+	// 	AttributeDefinitions: []*dynamodb.AttributeDefinition{
+	// 		{
+	// 			AttributeName: aws.String("BirthDay"),
+	// 			AttributeType: aws.String("S"),
+	// 		},
+	// 		{
+	// 			AttributeName: aws.String("Gender"),
+	// 			AttributeType: aws.String("S"),
+	// 		},
+	// 		{
+	// 			AttributeName: aws.String("PhotoURL"),
+	// 			AttributeType: aws.String("S"),
+	// 		},
+	// 	},
+	// 	KeySchema: []*dynamodb.KeySchemaElement{
+	// 		{
+	// 			AttributeName: aws.String("ID"),
+	// 			KeyType:       aws.String("HASH"),
+	// 		},
+	// 		{
+	// 			AttributeName: aws.String("Name"),
+	// 			KeyType:       aws.String("S"),
+	// 		},
+	// 	},
+	// 	ProvisionedThroughput: &dynamodb.ProvisionedThroughput{
+	// 		ReadCapacityUnits:  aws.Int64(5),
+	// 		WriteCapacityUnits: aws.Int64(5),
+	// 	},
 
-		TableName: aws.String("TableUsers"),
-	}
-	_, err := db.CreateTable(input)
-	if err != nil {
-		log.Fatalf("Got error calling CreateTable: %s", err)
-	}
+	// 	TableName: aws.String("TableUsers"),
+	// }
+	// _, err := db.CreateTable(input)
+	// if err != nil {
+	// 	log.Fatalf("Got error calling CreateTable: %s", err)
+	// }
 
 }
 
