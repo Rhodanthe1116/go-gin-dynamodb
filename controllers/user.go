@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/vsouza/go-gin-boilerplate/forms"
-	"github.com/vsouza/go-gin-boilerplate/models"
+	"github.com/Rhodanthe1116/go-gin-boilerplate/forms"
+	"github.com/Rhodanthe1116/go-gin-boilerplate/models"
 )
 
 type UserController struct{}

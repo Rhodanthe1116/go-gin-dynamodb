@@ -1,4 +1,4 @@
-module github.com/vsouza/go-gin-boilerplate
+module github.com/Rhodanthe1116/go-gin-boilerplate
 
 go 1.13
 

@@ -5,8 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
-	"github.com/vsouza/go-gin-boilerplate/controllers"
-	"github.com/vsouza/go-gin-boilerplate/db"
+	"github.com/Rhodanthe1116/go-gin-boilerplate/controllers"
+	"github.com/Rhodanthe1116/go-gin-boilerplate/db"
 )
 
 // func Test(t *testing.T) { Testing(t) }
