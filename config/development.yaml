@@ -1,6 +1,10 @@
 server:
   port: 0.0.0.0:8888
 
+jwt:
+  secret: RobertIsSoHandsome
+  expiration: 24
+
 http:
   auth:
     secret: 大表格

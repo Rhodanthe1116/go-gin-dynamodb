@@ -9,10 +9,10 @@ import (
 	"net/http"
 )
 
-type UserController struct{}
+type StoreController struct{}
 
-func (h UserController) Signup(c *gin.Context) {
-    var Payload forms.UserSignup
+func (h StoreController) Signup(c *gin.Context) {
+    var Payload forms.StoreSignup
     if err := c.ShouldBindJSON(&Payload); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
@@ -24,18 +24,18 @@ func (h UserController) Signup(c *gin.Context) {
     }
     uuid := uuid.NewV4().String()
     Payload.UUID=uuid
-    // TODO: db.insert(Payload.Password,Payload.Phone);
+    // TODO: db.insert(Payload.UUID,Payload.Name,Payload.Password,Payload.Phone,Payload.Address);
 	// c.String(http.StatusOK, "Success")
     c.JSON(200, Payload)
 }
 
-func (h UserController) Login(c *gin.Context) {
-    var Payload forms.UserLogin
+func (h StoreController) Login(c *gin.Context) {
+    var Payload forms.StoreLogin
     if err := c.ShouldBindJSON(&Payload); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
-    // TODO: user=db.get(Payload.Phone);
+    // TODO: store=db.get(Payload.Phone);
     if err := CheckPassword("$2a$14$hNbyJM1JPwCTnd4Yx3AGG.lITDqeBOrEhzh2/fs3zA2lJ7rTwn12G",Payload.Password); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
@@ -53,8 +53,19 @@ func (h UserController) Login(c *gin.Context) {
 		})
 		return
 	}
-    var token forms.UserToken
+    var token forms.StoreToken
     token.Token = signedToken
     c.JSON(200,token)
+}
+
+func (h StoreController) Profile(c *gin.Context){
+    phone,_ := c.Get("phone")
+    // TODO: store=db.get(phone);
+    var Profile forms.StoreProfile
+    Profile.Name="giver"
+    Profile.Phone=phone.(string)
+    Profile.Address="abcdefg"
+    Profile.QrCode="https://example.com/"
+    c.JSON(200,Profile)
 }
 
