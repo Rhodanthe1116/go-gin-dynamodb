@@ -3,7 +3,7 @@ server:
 
 jwt:
   secret: RobertIsSoHandsome
-  expiration: 24
+  expiration: 65536
 
 http:
   auth:
