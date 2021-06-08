@@ -6,6 +6,7 @@ import (
 	"github.com/Rhodanthe1116/go-gin-boilerplate/forms"
 	"github.com/Rhodanthe1116/go-gin-boilerplate/auth"
     "github.com/Rhodanthe1116/go-gin-boilerplate/config"
+    "github.com/Rhodanthe1116/go-gin-boilerplate/models"
 	"net/http"
 )
 
@@ -17,15 +18,27 @@ func (h StoreController) Signup(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
-    // TODO: if(db.get(Payload.Phone)) then duplicated;
+    if item,_ := models.GetStoreByPhone(Payload.Phone); item!=nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Phone existed.", "store": item})
+        return
+    }
     if err := HashPassword(&Payload.Password); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
     uuid := uuid.NewV4().String()
     Payload.UUID=uuid
-    // TODO: db.insert(Payload.UUID,Payload.Name,Payload.Password,Payload.Phone,Payload.Address);
-	// c.String(http.StatusOK, "Success")
+    store := models.Store{
+        Phone: Payload.Phone,
+        Password: Payload.Password,
+        UUID: Payload.UUID,
+        Name: Payload.Name,
+        Address: Payload.Address,
+    }
+    if _,err := store.Signup(); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
     c.JSON(200, Payload)
 }
 
@@ -35,8 +48,12 @@ func (h StoreController) Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
-    // TODO: store=db.get(Payload.Phone);
-    if err := CheckPassword("$2a$14$hNbyJM1JPwCTnd4Yx3AGG.lITDqeBOrEhzh2/fs3zA2lJ7rTwn12G",Payload.Password); err != nil {
+    store,err := models.GetStoreByPhone(Payload.Phone)
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+    if err := CheckPassword(store.Password,Payload.Password); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
@@ -60,12 +77,17 @@ func (h StoreController) Login(c *gin.Context) {
 
 func (h StoreController) Profile(c *gin.Context){
     phone,_ := c.Get("phone")
-    // TODO: store=db.get(phone);
+    store,err := models.GetStoreByPhone(phone.(string))
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
     var Profile forms.StoreProfile
-    Profile.Name="giver"
-    Profile.Phone=phone.(string)
-    Profile.Address="abcdefg"
-    Profile.QrCode="https://example.com/"
+    Profile.Name=store.Name
+    Profile.Phone=store.Phone
+    Profile.Address=store.Address
+    Profile.UUID=store.UUID
+    Profile.QrCode=store.Phone
     c.JSON(200,Profile)
 }
 

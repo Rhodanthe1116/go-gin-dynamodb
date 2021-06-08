@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/Rhodanthe1116/go-gin-boilerplate/forms"
+	"github.com/Rhodanthe1116/go-gin-boilerplate/models"
 	"net/http"
 )
 
@@ -16,15 +17,22 @@ func (h RecordController) Record(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
-    phone,_ := c.Get("phone")
+    userPhone,_ := c.Get("phone")
+
+    storePhone := Payload.StoreId
+    if _,err := models.GetStoreByPhone(storePhone); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
     curTime := time.Now().Local().Unix()
-    // TODO: user=db.get(phone);
-    // TODO: db.insert(Payload.StoreId, user.id, curTime)
-    // c.String(200, "Success")
-    var Response forms.RecordRecord
-    Response.StoreId=Payload.StoreId
-    Response.UserId="998244353"
-    Response.Time=curTime
-    Response.Phone=phone.(string)
-    c.JSON(200, Response)
+    record := models.Record{
+        UserId: userPhone.(string),
+        StoreId: storePhone,
+        Time: curTime,
+    }
+    if _,err := record.Record(); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+    c.JSON(200, record)
 }

@@ -18,6 +18,7 @@ type StoreProfile struct {
 	Phone   string `json:"phone" binding:"required"`
 	Address string `json:"address" binding:"required"`
     QrCode string `json:"qrcode" binding:"required"`
+    UUID string `json:"uuid"`
 }
 
 type StoreToken struct {

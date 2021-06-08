@@ -17,6 +17,11 @@ docker:
 	@(cd .devcontainer; docker ps | grep devcontainer_web_1 || docker-compose up -d;)
 	docker exec -it devcontainer_web_1 zsh
 
+.PHONY: dbenv
+## dbenv: export AWS credentials
+dbenv:
+
+
 .PHONY: stop
 ## stop: Stop docker-compose.
 stop:

@@ -11,5 +11,5 @@ http:
 
 db:
   region: us
-  endpoint: localhost:8080
+  endpoint: 172.18.0.2:8080
   disable_ssl: true

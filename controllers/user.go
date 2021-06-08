@@ -6,6 +6,7 @@ import (
 	"github.com/Rhodanthe1116/go-gin-boilerplate/forms"
 	"github.com/Rhodanthe1116/go-gin-boilerplate/auth"
     "github.com/Rhodanthe1116/go-gin-boilerplate/config"
+    "github.com/Rhodanthe1116/go-gin-boilerplate/models"
 	"net/http"
 )
 
@@ -17,15 +18,25 @@ func (h UserController) Signup(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
-    // TODO: if(db.get(Payload.Phone)) then duplicated;
+    if item,_ := models.GetUserByPhone(Payload.Phone); item!=nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Phone existed.", "user": item})
+        return
+    }
     if err := HashPassword(&Payload.Password); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
     uuid := uuid.NewV4().String()
     Payload.UUID=uuid
-    // TODO: db.insert(Payload.Password,Payload.Phone);
-	// c.String(http.StatusOK, "Success")
+    user := models.User{
+        Phone: Payload.Phone,
+        Password: Payload.Password,
+        UUID: Payload.UUID,
+    }
+    if _,err := user.Signup(); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
     c.JSON(200, Payload)
 }
 
@@ -35,8 +46,12 @@ func (h UserController) Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
-    // TODO: user=db.get(Payload.Phone);
-    if err := CheckPassword("$2a$14$hNbyJM1JPwCTnd4Yx3AGG.lITDqeBOrEhzh2/fs3zA2lJ7rTwn12G",Payload.Password); err != nil {
+    user,err := models.GetUserByPhone(Payload.Phone)
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+    if err := CheckPassword(user.Password,Payload.Password); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }

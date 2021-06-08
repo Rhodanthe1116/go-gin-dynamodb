@@ -4,6 +4,7 @@ services:
     image: vsouza/dynamo-local
     ports:
       - 8080:8080
+    command: --port 8080
 
   web:
     build:
