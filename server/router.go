@@ -1,6 +1,9 @@
 package server
 
 import (
+    "time"
+
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/Rhodanthe1116/go-gin-boilerplate/controllers"
 	"github.com/Rhodanthe1116/go-gin-boilerplate/middlewares"
@@ -10,6 +13,17 @@ func NewRouter() *gin.Engine {
 	router := gin.New()
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
+    router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{},
+		AllowMethods:     []string{"GET", "POST"},
+		AllowHeaders:     []string{"Origin"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		AllowOriginFunc: func(origin string) bool {
+			return true //origin == "https://github.com"
+		},
+		MaxAge: 12 * time.Hour,
+	}))
 
     store := new(controllers.StoreController)
     user := new(controllers.UserController)
