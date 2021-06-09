@@ -18,6 +18,9 @@ func main() {
 		fmt.Println("Usage: server -e {mode}")
 		os.Exit(1)
 	}
+	flag.Parse()
+	config.Init(*environment)
+	db.Init()
     c := make(chan os.Signal)
     signal.Notify(c, os.Interrupt, syscall.SIGTERM)
     go func() {
@@ -25,8 +28,5 @@ func main() {
         db.Clear()
         os.Exit(1)
     }()
-	flag.Parse()
-	config.Init(*environment)
-	db.Init()
 	server.Init()
 }
