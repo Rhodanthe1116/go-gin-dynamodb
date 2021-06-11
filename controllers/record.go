@@ -20,9 +20,12 @@ func (h RecordController) Record(c *gin.Context) {
     userPhone,_ := c.Get("phone")
 
     storePhone := Payload.StoreId
-    if _,err := models.GetStoreByPhone(storePhone); err != nil {
+    var storeName string
+    if store,err := models.GetStoreByPhone(storePhone); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
+    } else{
+        storeName=store.Name
     }
     curTime := time.Now().Local().Unix()
     record := models.Record{
@@ -34,5 +37,11 @@ func (h RecordController) Record(c *gin.Context) {
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
-    c.JSON(200, record)
+    result := forms.Record{
+        UserId: record.UserId,
+        StoreId: record.StoreId,
+        Time: record.Time,
+        StoreName: storeName,
+    }
+    c.JSON(200, result)
 }
