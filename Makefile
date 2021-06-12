@@ -9,7 +9,22 @@ build:
 .PHONY: run
 ## run: Build and Run in development mode.
 run: build
-	@./$(NAME) -e development
+	@./$(NAME) -e development -s all
+
+.PHONY: user
+## user: Build and Run in development mode with user service only.
+user: build
+	@./$(NAME) -e development -s user
+
+.PHONY: store
+## store: Build and Run in development mode with store service only.
+store: build
+	@./$(NAME) -e development -s store
+
+.PHONY: record
+## record: Build and Run in development mode with record service only.
+record: build
+	@./$(NAME) -e development -s record
 
 .PHONY: docker
 ## docker: Run docker-compose.

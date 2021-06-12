@@ -14,8 +14,9 @@ import (
 
 func main() {
 	environment := flag.String("e", "development", "")
+    service := flag.String("s","all","user, store, record, or all")
 	flag.Usage = func() {
-		fmt.Println("Usage: server -e {mode}")
+		fmt.Println("Usage: server -e {mode} -s {service}")
 		os.Exit(1)
 	}
 	flag.Parse()
@@ -25,8 +26,8 @@ func main() {
     signal.Notify(c, os.Interrupt, syscall.SIGTERM)
     go func() {
         <-c
-        db.Clear()
+        // db.Clear()
         os.Exit(1)
     }()
-	server.Init()
+	server.Init(*service)
 }
