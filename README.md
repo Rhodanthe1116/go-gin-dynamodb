@@ -1,4 +1,17 @@
 # Go Gin Boilerplate
+
+## Deploy
+
+```bash
+export USERNAME=
+docker build -t $USERNAME/covid-tracker-user .
+docker push $USERNAME/covid-tracker-user
+docker build -t $USERNAME/covid-tracker-store .
+docker push $USERNAME/covid-tracker-store
+docker build -t $USERNAME/covid-tracker-record .
+docker push $USERNAME/covid-tracker-record
+```
+
 > A starter project with Golang, Gin and DynamoDB
 
 [![Build Status][travis-image]][travis-url]
