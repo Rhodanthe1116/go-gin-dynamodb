@@ -5,6 +5,9 @@ jwt:
   secret: RobertIsSoHandsome
   expiration: 65536
 
+hmac:
+  key: "RobertIsHandsome"
+
 http:
   auth:
     secret: 大表格

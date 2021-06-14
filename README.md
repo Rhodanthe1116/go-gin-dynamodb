@@ -94,6 +94,17 @@ Distributed under the MIT license. See [License](https://vsouza.mit-license.org)
 [license-image]: https://img.shields.io/badge/License-MIT-blue.svg
 [license-url]: https://vsouza.mit-license.org
 
+## APIs
+
+```
+curl -X POST http://localhost:8888/auth/user/signup -d '{"phone": "0912345678", "password": "878787"}'
+curl -X POST http://localhost:8888/auth/user/login -d '{"phone": "0912345678", "password": "878787"}'
+curl -X POST http://localhost:8888/auth/store/signup -d '{"phone": "0987654321", "password": "87878787", "name": "giver", "address": "taiwan"}'
+curl -X POST http://localhost:8888/auth/store/login -d '{"phone": "0987654321", "password": "87878787"}'
+curl -X GET http://localhost:8888/auth/store/profile -H 'Authorization: Bearer <store's jwt token>'
+curl -X POST http://localhost:8888/records -H 'Authorization: Bearer <user's jwt token>' -d '{"store_id": "0987654321"}'
+```
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fvsouza%2Fgo-gin-boilerplate.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fvsouza%2Fgo-gin-boilerplate?ref=badge_large)
+

@@ -8,6 +8,9 @@ import (
     "github.com/Rhodanthe1116/go-gin-boilerplate/config"
     "github.com/Rhodanthe1116/go-gin-boilerplate/models"
 	"net/http"
+    "crypto/hmac"
+    "crypto/sha256"
+    "encoding/hex"
 )
 
 type StoreController struct{}
@@ -82,12 +85,17 @@ func (h StoreController) Profile(c *gin.Context){
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
+	config := config.GetConfig()
+    key := config.GetString("hmac.key")
+    mac := hmac.New(sha256.New,[]byte(key))
+    mac.Write([]byte(store.Phone))
+    MAC := hex.EncodeToString(mac.Sum(nil))
     var Profile forms.StoreProfile
     Profile.Name=store.Name
     Profile.Phone=store.Phone
     Profile.Address=store.Address
     Profile.UUID=store.UUID
-    Profile.QrCode=store.Phone
+    Profile.QrCode=store.Phone+"||"+MAC
     c.JSON(200,Profile)
 }
 
