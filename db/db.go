@@ -40,8 +40,8 @@ func Init() {
 			},
 		},
 		ProvisionedThroughput: &dynamodb.ProvisionedThroughput{
-			ReadCapacityUnits:  aws.Int64(20),
-			WriteCapacityUnits: aws.Int64(5),
+			ReadCapacityUnits:  aws.Int64(30),
+			WriteCapacityUnits: aws.Int64(10),
 		},
 
 		TableName: aws.String("TableUsers"),
@@ -64,8 +64,8 @@ func Init() {
 			},
 		},
 		ProvisionedThroughput: &dynamodb.ProvisionedThroughput{
-			ReadCapacityUnits:  aws.Int64(20),
-			WriteCapacityUnits: aws.Int64(5),
+			ReadCapacityUnits:  aws.Int64(30),
+			WriteCapacityUnits: aws.Int64(10),
 		},
 
 		TableName: aws.String("TableStores"),
@@ -96,7 +96,7 @@ func Init() {
 		},
 		ProvisionedThroughput: &dynamodb.ProvisionedThroughput{
 			ReadCapacityUnits:  aws.Int64(5),
-			WriteCapacityUnits: aws.Int64(20),
+			WriteCapacityUnits: aws.Int64(50),
 		},
 
 		TableName: aws.String("TableRecordsUser"),
@@ -129,7 +129,7 @@ func Init() {
 		},
 		ProvisionedThroughput: &dynamodb.ProvisionedThroughput{
 			ReadCapacityUnits:  aws.Int64(5),
-			WriteCapacityUnits: aws.Int64(20),
+			WriteCapacityUnits: aws.Int64(50),
 		},
 
 		TableName: aws.String("TableRecordsStore"),

@@ -24,10 +24,10 @@ func (h UserController) Signup(c *gin.Context) {
         c.JSON(http.StatusBadRequest, gin.H{"error": "Phone is not a valid phone number."})
         return
     }
-    // if item,_ := models.GetUserByPhone(Payload.Phone); item!=nil {
-    //     c.JSON(http.StatusBadRequest, gin.H{"error": "Phone existed.", "user": item})
-    //     return
-    // }
+    if item,_ := models.GetUserByPhone(Payload.Phone); item!=nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Phone existed.", "user": item})
+        return
+    }
     if err := HashPassword(&Payload.Password); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
