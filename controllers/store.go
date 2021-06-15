@@ -21,10 +21,10 @@ func (h StoreController) Signup(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
-    if item,_ := models.GetStoreByPhone(Payload.Phone); item!=nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Phone existed.", "store": item})
-        return
-    }
+    // if item,_ := models.GetStoreByPhone(Payload.Phone); item!=nil {
+    //     c.JSON(http.StatusBadRequest, gin.H{"error": "Phone existed.", "store": item})
+    //     return
+    // }
     if err := HashPassword(&Payload.Password); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return

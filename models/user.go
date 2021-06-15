@@ -27,10 +27,10 @@ func (user User) Signup() (*User, error) {
 	params := &dynamodb.PutItemInput{
 		Item:      item,
 		TableName: aws.String("TableUsers"),
+        ConditionExpression: aws.String("attribute_not_exists(Phone)"),
 	}
 	if _, err := db.PutItem(params); err != nil {
-		log.Println(err)
-		return nil, errors.New("error when try to save data to database")
+		return nil, err
 	}
 	return &user, nil
 }

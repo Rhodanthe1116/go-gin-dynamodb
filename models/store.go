@@ -29,10 +29,10 @@ func (store Store) Signup() (*Store, error) {
 	params := &dynamodb.PutItemInput{
 		Item:      item,
 		TableName: aws.String("TableStores"),
+        ConditionExpression: aws.String("attribute_not_exists(Phone)"),
 	}
 	if _, err := db.PutItem(params); err != nil {
-		log.Println(err)
-		return nil, errors.New("error when try to save data to database")
+		return nil, err
 	}
 	return &store, nil
 }
