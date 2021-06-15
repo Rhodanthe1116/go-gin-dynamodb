@@ -1,6 +1,8 @@
 package controllers
 
 import (
+    "strconv"
+
     "github.com/satori/go.uuid"
 	"github.com/gin-gonic/gin"
 	"github.com/Rhodanthe1116/go-gin-boilerplate/forms"
@@ -16,6 +18,10 @@ func (h UserController) Signup(c *gin.Context) {
     var Payload forms.UserSignup
     if err := c.ShouldBindJSON(&Payload); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+    if _, err := strconv.ParseInt(Payload.Phone,10,64); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Phone is not a valid phone number."})
         return
     }
     // if item,_ := models.GetUserByPhone(Payload.Phone); item!=nil {
