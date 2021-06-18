@@ -66,7 +66,7 @@ make deps
 
 ## Usage example
 
-`curl http://localhost:8888/health`
+`curl -s ${TARGET_URL}/health`
 
 ## Development setup
 
@@ -97,12 +97,19 @@ Distributed under the MIT license. See [License](https://vsouza.mit-license.org)
 ## APIs
 
 ```
-curl -X POST http://localhost:8888/auth/user/signup -d '{"phone": "0912345678", "password": "878787"}'
-curl -X POST http://localhost:8888/auth/user/login -d '{"phone": "0912345678", "password": "878787"}'
-curl -X POST http://localhost:8888/auth/store/signup -d '{"phone": "0987654321", "password": "87878787", "name": "giver", "address": "taiwan"}'
-curl -X POST http://localhost:8888/auth/store/login -d '{"phone": "0987654321", "password": "87878787"}'
-curl -X GET http://localhost:8888/auth/store/profile -H 'Authorization: Bearer <store's jwt token>'
-curl -X POST http://localhost:8888/records -H 'Authorization: Bearer <user's jwt token>' -d '{"store_id": "0987654321"}'
+TARGET_URL='http://3.224.156.234.sslip.io'
+USER_PHONE='0912345678'
+USER_PASS='878787'
+STORE_PHONE='0987654321'
+STORE_PASS='87878787'
+STORE_NAME='giver'
+STORE_ADDR='taipei'
+curl -s -X POST ${TARGET_URL}/auth/user/signup -d "{\"phone\": \"${USER_PHONE}\", \"password\": \"${USER_PASS}\"}"
+user_token=$(curl -s -X POST ${TARGET_URL}/auth/user/login -d "{\"phone\": \"${USER_PHONE}\", \"password\": \"${USER_PASS}\"}" | tee /dev/tty | sed 's/{"token":"\([^"]*\)"}/\1/')
+curl -s -X POST ${TARGET_URL}/auth/store/signup -d "{\"phone\": \"${STORE_PHONE}\", \"password\": \"${STORE_PASS}\", \"name\": \"${STORE_NAME}\", \"address\": \"${STORE_ADDR}\"}"
+store_token=$(curl -s -X POST ${TARGET_URL}/auth/store/login -d "{\"phone\": \"${STORE_PHONE}\", \"password\": \"${STORE_PASS}\"}" | tee /dev/tty | sed 's/{"token":"\([^"]*\)"}/\1/')
+qrcode=$(curl -s -X GET ${TARGET_URL}/auth/store/profile -H "Authorization: Bearer ${store_token}" | tee /dev/tty | grep -o '"qrcode":"[^"]*"' | sed 's/"qrcode":"\([^"]*\)"/\1/')
+curl -s -X POST ${TARGET_URL}/records -H "Authorization: Bearer ${user_token}" -d "{\"store_id\": \"${qrcode}\"}"
 ```
 
 ## License
